@@ -1,15 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const fs = require('fs');
-
-const getData = (command) => {
-    const foundCommands = fs
-        .readdirSync(__dirname)
-        .filter(file => file.endsWith('.js'))
-        .map(file => require(`./${file}`))
-        .filter(cmd => cmd.triggers.includes(command) || cmd.name === command);
-    if (!foundCommands[0]) return null;
-    return { ...foundCommands[0].info, ...foundCommands[0].type, disabled: foundCommands[0].disabled }
-}
 
 module.exports = {
     name: 'help',
@@ -40,7 +29,7 @@ module.exports = {
         const command = interaction.options.getString('command');
         const embed = client.embed()
         if (command) {
-            const data = getData(command.toLowerCase());
+            const data = { ...client.Commands.get(command).info, ...client.Commands.get(command).type, disabled: client.Commands.get(command).disabled }
             if (data == null) return interaction.reply({ content: 'That command does not exist.', ephemeral: true });
             embed
                 .setTitle(`Help for ${data.name}`)
@@ -69,26 +58,22 @@ module.exports = {
                         value: data.blockDM ? 'No' : 'Yes',
                     }
                 )
-                if (data.permissions) embed.addFields({
-                    name: 'Required Permissions',
-                    value: data.permissions.join(', ')
-                })
+            if (data.permissions) embed.addFields({
+                name: 'Required Permissions',
+                value: data.permissions.join(', ')
+            })
         } else {
             const fields = {}
             const formattedFields = []
-            fs
-                .readdirSync(__dirname)
-                .filter(file => file.endsWith('.js'))
-                .map(file => require(`./${file}`))
+            Array.from(client.Commands.values())
                 .filter(cmd => !cmd.disabled)
-                .forEach(cmd => {fields[cmd.info.type] += `, ${cmd.info.name}`})
+                .forEach(cmd => { fields[cmd.info.type] += `, \`${cmd.info.name}\`` })
             for (let [key, value] of Object.entries(fields)) {
                 formattedFields.push({
                     name: key,
                     value: value.split('').slice(10).join('')
                 })
             }
-            
             embed
                 .setTitle('Help')
                 .setDescription('Use `/help [command]` to get help with a specific command.')
@@ -100,7 +85,7 @@ module.exports = {
         const command = message.content.split(' ')[1];
         const embed = client.embed()
         if (command) {
-            const data = getData(command.toLowerCase());
+            const data = { ...client.Commands.get(command).info, ...client.Commands.get(command).type, disabled: client.Commands.get(command).disabled }
             if (data == null) return message.reply('That command does not exist.');
             embed
                 .setTitle(`Help for ${data.name}`)
@@ -135,26 +120,23 @@ module.exports = {
                         value: data.blockDM ? 'No' : 'Yes',
                     }
                 )
-                if (data.permissions) embed.addFields({
-                    name: 'Required Permissions',
-                    value: data.permissions.join(', ')
-                })
+            if (data.permissions) embed.addFields({
+                name: 'Required Permissions',
+                value: data.permissions.join(', ')
+            })
         } else {
             const fields = {}
             const formattedFields = []
-            fs
-                .readdirSync(__dirname)
-                .filter(file => file.endsWith('.js'))
-                .map(file => require(`./${file}`))
+            Array.from(client.Commands.values())
                 .filter(cmd => !cmd.disabled)
-                .forEach(cmd => {fields[cmd.info.type] += `, \`${cmd.info.name}\``})
+                .forEach(cmd => { fields[cmd.info.type] += `, \`${client.configs.prefix}${cmd.info.name}\`` })
             for (let [key, value] of Object.entries(fields)) {
                 formattedFields.push({
                     name: key,
                     value: value.split('').slice(10).join('')
                 })
             }
-            
+
             embed
                 .setTitle('Help')
                 .setDescription(`Use \`${client.configs.prefix}help [command]\` to get help with a specific command.`)
