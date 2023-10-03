@@ -15,9 +15,9 @@ module.exports = {
         if (message.content.startsWith(client.configs.prefix)) {
             const commandBase = message.content.split(' ')[0].slice(client.configs.prefix.length).toLowerCase();
             for (let data of fs
-                .readdirSync('./commands')
+                .readdirSync(`${client.baseDir}/commands`)
                 .filter(file => file.endsWith('.js'))
-                .map(file => require(`../commands/${file}`))
+                .map(file => require(`${client.baseDir}/commands/${file}`))
                 .filter(command => command.triggers.includes(commandBase) && command.type.text === true)
             ) {
                 if (data.blockDM && message.channel.isDMBased()) return message.reply({ content: client.configs.defaults.dmDisabled });

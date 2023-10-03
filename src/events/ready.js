@@ -18,7 +18,7 @@ module.exports = {
         else if (currentStats.ping.value < 200) currentStats.ping.color = 'yellow';
         else if (currentStats.ping.value < 300) currentStats.ping.color = 'rgb(255,127,0)';
         else if (currentStats.ping.value < 400) currentStats.ping.color = 'red';
-        console.log(chalk`{bold [READY]} Logged in as {red ${client.user.tag}}!`);
+        console.log(chalk`{bold [READY]} Logged in as {red ${client.user.tag.split("#")[0]}}!`);
         console.log(chalk`{bold [READY]} Current ping: {${currentStats.ping.color} ${currentStats.ping.value} ms}`);
         console.log(chalk`{bold [READY]} Current guilds: {blue ${currentStats.guilds}}`);
         console.log(chalk`{bold [READY]} Current users: {yellow ${currentStats.users}}`);
