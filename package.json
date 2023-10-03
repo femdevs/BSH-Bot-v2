@@ -1,0 +1,31 @@
+{
+  "name": "brian-protector",
+  "version": "1.0.0",
+  "description": "Brian's Protector (New and Improved)",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "femdevs",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.44",
+    "@sentry/integrations": "^7.73.0",
+    "@sentry/node": "^7.73.0",
+    "@sentry/profiling-node": "^1.2.1",
+    "axios": "^1.5.1",
+    "chalk": "^3.0.0",
+    "discord-api-types": "^0.37.59",
+    "discord-html-transcripts": "^3.2.0",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "mathjs": "^11.11.1",
+    "node-cron": "^3.0.2",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0"
+  }
+}
