@@ -41,7 +41,7 @@ module.exports = {
         context.font = '54px Proxima Nova Bold';
         context.fillStyle = '#ffffff';
         context.fillText(
-            target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, ''),
+            target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, '').toUpperCase(),
             Math.round(canvas.width / (860 / 302)),
             canvas.height / 3.5
         );
@@ -84,7 +84,7 @@ module.exports = {
         context.font = '54px Proxima Nova Bold';
         context.fillStyle = '#ffffff';
         context.fillText(
-            target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, ''),
+            target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, '').toUpperCase(),
             Math.round(canvas.width / (860 / 302)),
             canvas.height / 3.5
         );

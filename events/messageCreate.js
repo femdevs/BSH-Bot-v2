@@ -98,7 +98,7 @@ module.exports = {
             context.font = "54px Proxima Nova Bold";
             context.fillStyle = "#ffffff";
             context.fillText(
-                message.author.username.replace(/[^ #'\*\-\.0-9A-Z\_a-z]/gim, ""),
+                message.author.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, "").toUpperCase(),
                 canvas.width / 2.5 - 30,
                 canvas.height / 3.5
             );
