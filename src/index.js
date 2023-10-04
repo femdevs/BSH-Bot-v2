@@ -84,7 +84,39 @@ const branding = {
 
 const startCPU = process.cpuUsage();
 
-client.stats = () => ({ ping: client.ws.ping, uptime: Utils.Formatter.list(Utils.Time.elapsedTime(Math.floor(process.uptime())).split(', ')), guilds: client.guilds.cache.size.toString(), cpu: (Object.values(process.cpuUsage(startCPU)).reduce((acc, cpu) => acc + cpu, 0) / os.cpus().reduce((acc, cpu) => acc + cpu.times.idle, 0)) * os.cpus().length, ram: { rawValue: (process.memoryUsage().heapTotal / (1024 ** 2)).toPrecision(2), percentage: ((process.memoryUsage().heapTotal / os.totalmem()) * 100).toPrecision(2) } })
+client.stats = () => {
+    const stats = {
+        ping: client.ws.ping,
+        uptime: Utils.Formatter.list(Utils.Time.elapsedTime(Math.floor(process.uptime())).split(', ')),
+        guilds: client.guilds.cache.size.toString(),
+        cpu: {
+            botOnly: ((Object.values(process.cpuUsage(startCPU)).reduce((acc, cpu) => acc + cpu, 0) / os.cpus().reduce((acc, cpu) => acc + cpu.times.idle, 0)) * os.cpus().length * 100).toFixed(2),
+            global: ((os.cpus().map(cpu => (cpu.times.user + cpu.times.sys) / cpu.times.idle).reduce((a, b) => a + b, 0) / os.cpus().length) * 100).toFixed(2)
+        },
+        ram: {
+            botOnly: {
+                rawValue: (process.memoryUsage().heapTotal / (1024 ** 2)).toFixed(2),
+                percentage: ((process.memoryUsage().heapTotal / os.totalmem()) * 100).toFixed(2),
+                unit: 'MB'
+            },
+            global: {
+                rawValue: ((os.totalmem() - os.freemem()) / (1024 ** 2)).toFixed(2),
+                percentage: (((os.totalmem() - os.freemem()) / os.totalmem()) * 100).toFixed(2),
+                unit: 'MB'
+            }
+        }
+    }
+    if (stats.ram.botOnly.rawValue > 1024) {
+        stats.ram.botOnly.rawValue = (stats.ram.botOnly.rawValue / 1024).toFixed(2);
+        stats.ram.botOnly.unit = 'GB';
+    }
+    if (stats.ram.global.rawValue > 1024) {
+        stats.ram.global.rawValue = (stats.ram.global.rawValue / 1024).toFixed(2);
+        stats.ram.global.unit = 'GB';
+    }
+
+    return stats;
+}
 
 client.baseDir = baseDir
 

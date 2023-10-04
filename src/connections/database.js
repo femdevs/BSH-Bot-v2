@@ -13,7 +13,7 @@ class PostgresDatabase {
             port: Number(process.env.PG_PORT),
         });
 
-        cron.schedule('*/30 * * * *', () => {
+        cron.schedule('*/5 * * * *', () => {
             // replace the pool
             this.Pool = new Postgres.Pool({
                 user: process.env.PG_USER,

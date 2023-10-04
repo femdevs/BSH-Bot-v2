@@ -41,11 +41,17 @@ module.exports = {
                 },
                 {
                     name: 'CPU usage',
-                    value: `${(status.cpu * 100).toPrecision(2)}%`,
+                    value: [
+                        `Bot Only: ${status.cpu.botOnly}%`,
+                        `Global: ${status.cpu.global}%`
+                    ].join('\n'),
                 },
                 {
                     name: 'RAM usage',
-                    value: `${status.ram.rawValue}KB (${status.ram.percentage}%)`,
+                    value: [
+                        `Bot Only: ${client.Utils.Formatter.formatNumber(status.ram.botOnly.rawValue)} ${status.ram.botOnly.unit} (${status.ram.botOnly.percentage}%)`,
+                        `Global: ${client.Utils.Formatter.formatNumber(status.ram.global.rawValue)} ${status.ram.global.unit} (${status.ram.global.percentage}%)`
+                    ].join('\n'),
                 }
             ])
         await interaction.reply({ embeds: [embed] });
@@ -70,11 +76,17 @@ module.exports = {
                 },
                 {
                     name: 'CPU usage',
-                    value: `${(status.cpu * 100).toPrecision(2)}%`,
+                    value: [
+                        `Bot Only: ${status.cpu.botOnly}%`,
+                        `Global: ${status.cpu.global}%`
+                    ].join('\n'),
                 },
                 {
                     name: 'RAM usage',
-                    value: `${status.ram.rawValue}KB (${status.ram.percentage}%)`,
+                    value: [
+                        `Bot Only: ${client.Utils.Formatter.formatNumber(status.ram.botOnly.rawValue)} ${status.ram.botOnly.unit} (${status.ram.botOnly.percentage}%)`,
+                        `Global: ${client.Utils.Formatter.formatNumber(status.ram.global.rawValue)} ${status.ram.global.unit} (${status.ram.global.percentage}%)`
+                    ].join('\n'),
                 }
             ])
         await message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
