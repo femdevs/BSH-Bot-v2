@@ -1,9 +1,32 @@
+const { ChannelType } = require("discord.js");
+
 module.exports = {
-    terms: [
-        'trigger_term_1',
-        'trigger_term_2'
-    ],
-    requirePrefix: true,
+    triggerCfgs: {
+        channel: {
+            activated: false,
+            requirePrefix: true,
+            ids: [],
+            types: []
+        },
+        role: {
+            activated: false,
+            requirePrefix: true,
+            ids: [],
+        },
+        member: {
+            activated: false,
+            requirePrefix: true,
+            ids: [],
+        },
+        message: {
+            activated: false,
+            requirePrefix: true,
+            prefixes: [],
+            contains: [],
+            suffixes: [],
+            regex: []
+        }
+    },
     async execute(message, client) {
         // Do stuff here
     }

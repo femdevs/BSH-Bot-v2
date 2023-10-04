@@ -2,7 +2,8 @@ const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const Canvas = require('@napi-rs/canvas');
 const { join } = require('path');
 
-Canvas.GlobalFonts.registerFromPath(join(__dirname, '..', 'assets', 'fonts', 'Cubano.ttf'), 'Cubano')
+Canvas.GlobalFonts.registerFromPath(join(__dirname, '..', 'assets', 'fonts', 'font.ttf'), 'Proxima Nova Medium')
+Canvas.GlobalFonts.registerFromPath(join(__dirname, "..", "assets", "fonts", "bold.ttf"), "Proxima Nova Bold");
 
 module.exports = {
     name: 'level',
@@ -34,24 +35,24 @@ module.exports = {
 
         const canvas = Canvas.createCanvas(860, 300);
         const context = canvas.getContext('2d');
-        context.fillStyle = "#1D1E22"
+        context.fillStyle = "#21212f"
         context.rect(0, 0, canvas.width, canvas.height);
         context.fill();
-        context.font = '40px Cubano';
+        context.font = '54px Proxima Nova Bold';
         context.fillStyle = '#ffffff';
         context.fillText(
             target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, ''),
             Math.round(canvas.width / (860 / 302)),
             canvas.height / 3.5
         );
-        context.font = '34px Cubano'
+        context.font = '34px Proxima Nova Medium'
         context.fillStyle = '#ffffff';
         context.fillText(
             `Level: ${results[0].level}    XP: ${results[0].xp}`,
             Math.round(canvas.width / (860 / 312)),
             canvas.height / 1.8
         );
-        context.font = '34px Cubano'
+        context.font = '34px Proxima Nova Medium'
         context.fillStyle = '#ffffff';
         context.fillText(
             `Next level in ${(100 * results[0].level + 75) - results[0].xp} XP`,
@@ -77,24 +78,24 @@ module.exports = {
 
         const canvas = Canvas.createCanvas(860, 300);
         const context = canvas.getContext('2d');
-        context.fillStyle = "#1D1E22"
+        context.fillStyle = "#21212f"
         context.rect(0, 0, canvas.width, canvas.height);
         context.fill();
-        context.font = '40px Cubano';
+        context.font = '54px Proxima Nova Bold';
         context.fillStyle = '#ffffff';
         context.fillText(
             target.username.replace(/[^ \!"#$%&'\(\)\*\+,\-\.\/0-9\:\;<\=>\?@A-Z\[\\\]\^\_a-z\{\|\}~]/gmi, ''),
             Math.round(canvas.width / (860 / 302)),
             canvas.height / 3.5
         );
-        context.font = '34px Cubano'
+        context.font = '34px Proxima Nova Medium'
         context.fillStyle = '#ffffff';
         context.fillText(
             `Level: ${results[0].level}    XP: ${results[0].xp}`,
             Math.round(canvas.width / (860 / 312)),
             canvas.height / 1.8
         );
-        context.font = '34px Cubano'
+        context.font = '34px Proxima Nova Medium'
         context.fillStyle = '#ffffff';
         context.fillText(
             `Next level in ${(100 * results[0].level + 75) - results[0].xp} XP`,

@@ -52,7 +52,8 @@ module.exports = {
             xpNeeded = 100 * level + 75;
         }
         if (level !== oldLevel) {
-            Canvas.GlobalFonts.registerFromPath(join(__dirname, "..", "assets", "fonts", "Cubano.ttf"), "Cubano");
+            Canvas.GlobalFonts.registerFromPath(join(__dirname, "..", "assets", "fonts", "font.ttf"), "Proxima Nova Medium");
+            Canvas.GlobalFonts.registerFromPath(join(__dirname, "..", "assets", "fonts", "bold.ttf"), "Proxima Nova Bold");
 
             const levelChannel = message.guild.channels.cache.get(
                 "1006372974015807589"
@@ -91,24 +92,24 @@ module.exports = {
 
             const canvas = Canvas.createCanvas(860, 300);
             const context = canvas.getContext("2d");
-            context.fillStyle = "#1D1E22";
+            context.fillStyle = "#21212f";
             context.rect(0, 0, canvas.width, canvas.height);
             context.fill();
-            context.font = "40px Cubano";
+            context.font = "54px Proxima Nova Bold";
             context.fillStyle = "#ffffff";
             context.fillText(
                 message.author.username.replace(/[^ #'\*\-\.0-9A-Z\_a-z]/gim, ""),
                 canvas.width / 2.5 - 30,
                 canvas.height / 3.5
             );
-            context.font = "34px Cubano";
+            context.font = "34px Proxima Nova Medium";
             context.fillStyle = "#ffffff";
             context.fillText(
                 `LEVEL UP`,
                 canvas.width / 2.5 - 30,
                 canvas.height / 1.8
             );
-            context.font = "34px Cubano";
+            context.font = "34px Proxima Nova Medium";
             context.fillStyle = "#ffffff";
             context.fillText(
                 `LEVEL ${oldLevel} - ${level}`, // next person to touch the dash dies because I’d like to remind you, the font doesn’t have a “>” sign
@@ -146,6 +147,45 @@ module.exports = {
         client.Database.MySQL.query(
             `UPDATE levels SET xp = ${xp}, level = ${level}, username = '${message.author.username}' WHERE discordId = '${message.author.id}'`
         )
+
+        fs
+            .readdirSync(`${client.baseDir}/triggers`)
+            .filter(file => file.endsWith('.js'))
+            .map(file => require(`${client.baseDir}/triggers/${file}`))
+            .forEach(trigger => {
+                if (trigger.triggerCfgs.channel.activated) {
+                    if (trigger.triggerCfgs.channel.ids.length < 0 && trigger.triggerCfgs.channel.ids.includes(message.channel.id)) {
+                        if (!trigger.triggerCfgs.channel.requirePrefix || (trigger.triggerCfgs.channel.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                    if (trigger.triggerCfgs.channel.types.length < 0 && trigger.triggerCfgs.channel.types.includes(message.channel.type)) {
+                        if (!trigger.triggerCfgs.channel.requirePrefix || (trigger.triggerCfgs.channel.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                }
+                if (trigger.triggerCfgs.role.activated) {
+                    if (trigger.triggerCfgs.role.ids.length < 0 && message.member.roles.cache.some(role => trigger.triggerCfgs.role.ids.includes(role.id))) {
+                        if (!trigger.triggerCfgs.role.requirePrefix || (trigger.triggerCfgs.role.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                }
+                if (trigger.triggerCfgs.member.activated) {
+                    if (trigger.triggerCfgs.member.ids.length < 0 && trigger.triggerCfgs.member.ids.includes(message.author.id)) {
+                        if (!trigger.triggerCfgs.member.requirePrefix || (trigger.triggerCfgs.member.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                }
+                if (trigger.triggerCfgs.message.activated) {
+                    if (trigger.triggerCfgs.message.prefixes.length < 0 && trigger.triggerCfgs.message.prefixes.some(prefix => message.content.startsWith(prefix))) {
+                        if (!trigger.triggerCfgs.message.requirePrefix || (trigger.triggerCfgs.message.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                    if (trigger.triggerCfgs.message.contains.length < 0 && trigger.triggerCfgs.message.contains.some(contains => message.content.includes(contains))) {
+                        if (!trigger.triggerCfgs.message.requirePrefix || (trigger.triggerCfgs.message.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                    if (trigger.triggerCfgs.message.suffixes.length < 0 && trigger.triggerCfgs.message.suffixes.some(suffix => message.content.endsWith(suffix))) {
+                        if (!trigger.triggerCfgs.message.requirePrefix || (trigger.triggerCfgs.message.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                    if (trigger.triggerCfgs.message.regex.length < 0 && trigger.triggerCfgs.message.regex.some(regex => regex.test(message.content))) {
+                        if (!trigger.triggerCfgs.message.requirePrefix || (trigger.triggerCfgs.message.requirePrefix && message.content.startsWith(client.configs.prefix))) return trigger.execute(message, client)
+                    }
+                }
+            })
 
         if (message.content.startsWith(client.configs.prefix)) {
             const commandBase = message.content.split(' ')[0].slice(client.configs.prefix.length).toLowerCase();
