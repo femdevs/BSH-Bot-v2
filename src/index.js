@@ -7,14 +7,18 @@ const {
     PresenceUpdateStatus,
     Collection
 } = require('discord.js');
-
-const Utils = require('./functions/massClass');
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const chalk = require('chalk');
 const os = require('os');
 require('dotenv').config({ path: `${__dirname}/.env` });
+
+//- Internal Functions
+const Utils = require('./functions/massClass');
+const Database = require('./connections/database');
+
+//- Constants
 const baseDir = __dirname;
 const {
     TOKEN: token,
@@ -85,6 +89,7 @@ client.stats = () => ({ ping: client.ws.ping, uptime: Utils.Formatter.list(Utils
 client.baseDir = baseDir
 
 client.Utils = Utils
+client.Database = new Database()
 client.configs = {
     prefix: prefix ?? '',
     defaults: {
