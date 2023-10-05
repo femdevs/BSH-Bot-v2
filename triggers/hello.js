@@ -1,7 +1,7 @@
 const { ChannelType } = require("discord.js");
 
 module.exports = {
-    name: 'example',
+    name: 'hello',
     triggerCfgs: {
         channel: {
             activated: false,
@@ -20,15 +20,15 @@ module.exports = {
             ids: [],
         },
         message: {
-            activated: false,
-            requirePrefix: true,
+            activated: true,
+            requirePrefix: false,
             prefixes: [],
             contains: [],
             suffixes: [],
-            regex: []
+            regex: [/\b(hello|hi|howdy|hey)\b/gmi]
         }
     },
     async execute(message, client) {
-        // Do stuff here
+        message.channel.send('Hello!');
     }
 }

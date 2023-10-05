@@ -1,22 +1,15 @@
 class CustomMath {
     static devideWithRemainder = (a, b) => [Math.floor(a / b), a % b];
-    static collatz = (startingNumber = 5, maxIterations = 100) => {
-        if (startingNumber <= 0) throw new SyntaxError('Starting Number must be greater than 0');
-        let iterations = 0,
-            finished = false,
-            maxNumberIndex = 0,
-            maxNumber = startingNumber,
-            currentNumber = startingNumber;
-        while (iterations < maxIterations) {
-            currentNumber = (currentNumber % 2 == 1) ? (currentNumber * 3) + 1 : currentNumber / 2;
-            if (currentNumber > maxNumber) {
-                maxNumber = Math.max(maxNumber, currentNumber);
-                maxNumberIndex = iterations;
-            }
-            iterations++;
-            if (currentNumber == 4) { finished = true; break }
+    static collatz = (sn = 5, mi = 100) => {
+        if (sn <= 0) throw new SyntaxError('Starting Number must be greater than 0');
+        let i = 0, f = false, mn = sn, cn = sn
+       while (i < mi) {
+            cn = (cn % 2 == 1) ? (cn * 3) + 1 : cn / 2;
+            ++i;
+            mn = Math.max(mn, cn);
+            if (cn == 4) { f = true; break }
         }
-        return { iterations, finished, maxNumberIndex, maxNumber, currentNumber };
+        return { i, f, mn, cn };
     }
 }
 
@@ -31,15 +24,15 @@ class Timer {
             minute: "2-digit",
             second: "2-digit",
             weekday: "long",
-            timeZone: "Australia/Darwin",
+            timeZone: "America/Detroit",
             timeZoneName: "longGeneric",
         }
     }
     static timestamp = v => new Intl.DateTimeFormat(this.#timesettings.locale, this.#timesettings.options).format(v)
-    static elapsedTime = (timestamp) => isNaN(timestamp) ? TypeError("Timestamp must be a number") : Object.entries({ year: Math.floor(Math.floor(timestamp) / 60 / 60 / 24 / 30 / 12), month: Math.floor(Math.floor(timestamp) / 60 / 60 / 24 / 30) % 12, day: Math.floor(Math.floor(timestamp) / 60 / 60 / 24) % 30, hour: Math.floor(Math.floor(timestamp) / 60 / 60) % 24, minute: Math.floor(Math.floor(timestamp) / 60) % 60, second: Math.floor(timestamp) % 60 }).map(([key, value]) => value !== 0 ? `${value} ${key}${value == 1 ? '' : 's'}` : null).filter(value => value !== null).join(', ')
+    static elapsedTime = (timestamp) => isNaN(timestamp) ? TypeError("Timestamp must be a number") : Object.entries({ year: Math.floor(Math.floor(timestamp) / (60 ** 2) / 24 / 30 / 12), month: Math.floor(Math.floor(timestamp) / (60 ** 2) / 24 / 30) % 12, day: Math.floor(Math.floor(timestamp) / (60 ** 2) / 24) % 30, hour: Math.floor(Math.floor(timestamp) / (60 ** 2)) % 24, minute: Math.floor(Math.floor(timestamp) / 60) % 60, second: Math.floor(timestamp) % 60 }).map(([key, value]) => value !== 0 ? `${value} ${key}${value == 1 ? '' : 's'}` : null).filter(value => value !== null).join(', ')
     static stringToMilliseconds = (timeString) => typeof timeString !== 'string' ? TypeError("Time String must be a string") : timeString.split(' ').map(value => { switch (value.slice(-1)) { case 'w': return value.slice(0, -1) * 604800000; case 'd': return value.slice(0, -1) * 86400000; case 'h': return value.slice(0, -1) * 3600000; case 'm': return value.slice(0, -1) * 60000; case 's': return value.slice(0, -1) * 1000; } }).reduce((a, b) => a + b, 0);
     static stringToSeconds = (timeString) => this.stringToMilliseconds(timeString) / 1000;
-    static unixTime = (date) => (!(date instanceof Date) || !(typeof date == 'number')) ? TypeError("Date must be a Date object") : Math.round(date.getTime() / 1000)
+    static unixTime = (date) => (!(date instanceof Date) && typeof date !== 'number') ? TypeError("Date must be a Date object") : Math.round(date.getTime() / 1000)
 }
 
 class Converter {
@@ -56,12 +49,7 @@ class RandomGenerators {
     static bRanNum = (amount = 1, max = 10) => new Array(Math.max(amount, 1)).map(() => this.ranNum(max))
     static randHex = (prefix = '') => `${prefix}${Math.floor(Math.random() * Math.pow(16, 6)).toString(16)}`
     static bRandHex = (amount = 1, prefix = '') => new Array(Math.max(amount, 1)).map(() => this.randHex(prefix))
-    static customNumberGenerator = (min = 0, max = 100) => {
-        if (max <= 0 || min <= 0) throw new RangeError("Both min and max need to be above 0");
-        if (!(min < max)) throw new RangeError("min must be less than max");
-        if (max > Math.pow(10, 6)) throw new RangeError(`max must be less than ${Intl.NumberFormat('en-US').format(Math.pow(10, 6))}`);
-        return Math.round(Math.random() * Number(max) - Number(min)) + Number(min)
-    }
+    static customNumberGenerator = (min = 0, max = 100) => Math.round(Math.random() * Number(max) - Number(min)) + Number(min);
     static UUID = _ => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
     static randomString = (length = 10) => Array(length).map(_ => (Math.random() * 36 | 0).toString(36)).join('')
 }

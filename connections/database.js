@@ -39,7 +39,7 @@ class MySQLDatabase {
             ssl: { rejectUnauthorized: true }
         });
 
-        cron.schedule('*/30 * * * *', () => {
+        cron.schedule('*/5 * * * *', () => {
             this.Pool = MySQL.createPool({
                 user: process.env.MSQL_USER,
                 host: process.env.MSQL_HOST,

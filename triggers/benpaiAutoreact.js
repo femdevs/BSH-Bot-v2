@@ -1,7 +1,7 @@
 const { ChannelType } = require("discord.js");
 
 module.exports = {
-    name: 'example',
+    name: 'autoreact',
     triggerCfgs: {
         channel: {
             activated: false,
@@ -15,9 +15,9 @@ module.exports = {
             ids: [],
         },
         user: {
-            activated: false,
-            requirePrefix: true,
-            ids: [],
+            activated: true,
+            requirePrefix: false,
+            ids: ['505458216474378271'],
         },
         message: {
             activated: false,
@@ -29,6 +29,6 @@ module.exports = {
         }
     },
     async execute(message, client) {
-        // Do stuff here
+        message.react('🗿');
     }
 }

@@ -10,9 +10,11 @@ module.exports = {
      * @param {*} client 
      */
     async execute(interaction, client) {
+        client.runtimeStats.events.executed++;
         if (interaction.isCommand()) {
             const command = client.Commands.get(interaction.commandName);
             if (!command || !command.type.slash) return;
+            client.runtimeStats.commands.slashExecuted++;
             (command.blockDM && interaction.channel.isDMBased()) ?
                 interaction.reply({ content: client.configs.defaults.dmDisabled }) :
                 (command.channelLimits && !command.channelLimits.includes(interaction.channel.type)) ?
@@ -27,11 +29,23 @@ module.exports = {
                                     interaction.reply({ content: client.config.defaults.disabled }) :
                                     command.commandExecute(interaction, client);
         }
-        else if (interaction.isContextMenuCommand()) return client.Components.get('contextMenus').get(interaction.commandName).execute(interaction, client);
-        else if (interaction.isButton()) return client.Components.get('buttons').get(interaction.customId).execute(interaction, client);
-        else if (interaction.isAnySelectMenu()) return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client);
-        else if (interaction.isModalSubmit()) return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client);
-        else return await interaction.reply({ content: 'This interaction is not supported yet.', ephemeral: true });
+        else if (interaction.isContextMenuCommand()) {
+            client.runtimeStats.components.contextMenus.executed++;
+            return client.Components.get('contextMenus').get(interaction.commandName).execute(interaction, client)
+        }
+        else if (interaction.isButton()) {
+            client.runtimeStats.components.buttons.executed++;
+            return client.Components.get('buttons').get(interaction.customId).execute(interaction, client)
+        }
+        else if (interaction.isAnySelectMenu()) {
+            client.runtimeStats.components.selectMenus.executed++;
+            return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client)
+        }
+        else if (interaction.isModalSubmit()) {
+            client.runtimeStats.components.modals.executed++;
+            return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client)
+        }
+        else return await interaction.reply({ content: 'This interaction is not supported yet.', ephemeral: true })
         // Do stuff here
     },
 };

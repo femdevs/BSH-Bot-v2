@@ -36,6 +36,7 @@ const modals = new Collection();
 const commands = new Collection();
 const events = new Collection();
 const components = new Collection();
+const triggers = new Collection();
 
 const client = new Client({
     intents: [
@@ -81,6 +82,46 @@ const branding = {
     },
     color: 0x2F3136,
 }
+
+const runtimeStats = {
+    commands: {
+        registered: 0,
+        textExecuted: 0,
+        slashExecuted: 0,
+    },
+    triggers: {
+        registered: 0,
+        channelExecuted: 0,
+        roleExecuted: 0,
+        userExecuted: 0,
+        messageExecuted: 0,
+    },
+    events: {
+        registered: 0,
+        executed: 0,
+    },
+    components: {
+        buttons: {
+            registered: 0,
+            executed: 0,
+        },
+        selectMenus: {
+            registered: 0,
+            executed: 0,
+        },
+        contextMenus: {
+            registered: 0,
+            executed: 0,
+        },
+        modals: {
+            registered: 0,
+            executed: 0,
+        },
+    },
+
+}
+
+client.runtimeStats = runtimeStats;
 
 const startCPU = process.cpuUsage();
 
@@ -141,6 +182,7 @@ fs
         const event = require(`${__dirname}/events/${file}`);
         console.log(chalk`{bold Loaded event} {green ${event.name}}`);
         events.set(event.name, event);
+        client.runtimeStats.events.registered++;
         (event.once) ?
             client.once(event.name, (...args) => event.execute(...args, client))
             : client.on(event.name, (...args) => event.execute(...args, client))
@@ -156,6 +198,7 @@ fs
     .forEach(command => {
         commands.set(command.name, command);
         console.log(chalk`{bold Loaded command} {blue ${command.name}}`);
+        client.runtimeStats.commands.registered++;
         interactions.push(command.data.toJSON());
     });
 
@@ -165,6 +208,7 @@ fs
     .forEach(file => {
         const command = require(`${__dirname}/components/contextMenus/${file}`);
         console.log(chalk`{bold Loaded context menu} {red ${command.name}}`);
+        client.runtimeStats.components.contextMenus.registered++;
         interactions.push(command.data.toJSON());
         contextMenus.set(command.name, command);
     });
@@ -174,6 +218,7 @@ fs.readdirSync(`${__dirname}/components/buttons`)
     .forEach(file => {
         const command = require(`${__dirname}/components/buttons/${file}`);
         console.log(chalk`{bold Loaded button} {red ${command.name}}`);
+        client.runtimeStats.components.buttons.registered++;
         buttons.set(command.name, command);
     });
 
@@ -182,6 +227,7 @@ fs.readdirSync(`${__dirname}/components/selectMenus`)
     .forEach(file => {
         const command = require(`${__dirname}/components/selectMenus/${file}`);
         console.log(chalk`{bold Loaded select menu} {red ${command.name}}`);
+        client.runtimeStats.components.selectMenus.registered++;
         selectMenus.set(command.name, command);
     });
 
@@ -190,7 +236,17 @@ fs.readdirSync(`${__dirname}/components/modals`)
     .forEach(file => {
         const command = require(`${__dirname}/components/modals/${file}`);
         console.log(chalk`{bold Loaded modal} {red ${command.name}}`);
+        client.runtimeStats.components.modals.registered++;
         modals.set(command.name, command);
+    });
+
+fs.readdirSync(`${__dirname}/triggers`)
+    .filter(file => file.endsWith('.js'))
+    .forEach(file => {
+        const trigger = require(`${__dirname}/triggers/${file}`);
+        console.log(chalk`{bold Loaded trigger} {red ${trigger.name}}`);
+        client.runtimeStats.triggers.registered++;
+        triggers.set(trigger.name, trigger);
     });
 
 components.set('buttons', buttons);
@@ -201,6 +257,7 @@ components.set('modals', modals);
 client.Commands = commands;
 client.Events = events;
 client.Components = components;
+client.Triggers = triggers;
 
 new REST({ version: '10' })
     .setToken(token)
