@@ -7,10 +7,11 @@ module.exports = {
     /**
      * 
      * @param {import('discord.js').BaseInteraction} interaction 
-     * @param {*} client 
+     * @param {import('discord.js').Client} client 
      */
     async execute(interaction, client) {
         client.runtimeStats.events.executed++;
+        if (interaction.isAutocomplete()) return client.Commands.get(interaction.commandName).autocomplete(interaction, client);
         if (interaction.isCommand()) {
             const command = client.Commands.get(interaction.commandName);
             if (!command || !command.type.slash) return;

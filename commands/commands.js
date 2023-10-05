@@ -31,7 +31,7 @@ module.exports = {
                 },
                 {
                     name: 'Commands',
-                    value: Array.from(client.Commands.keys()).map(e => `\`${e}\``).join(', ')
+                    value: Array.from(client.Commands.keys()).map(e => `- \`/${e}\``).join('\n')
                 }
             ])
         await interaction.reply({ embeds: [embed] });
@@ -46,7 +46,7 @@ module.exports = {
                 },
                 {
                     name: 'Commands',
-                    value: Array.from(client.Commands.keys()).map(e => `\`${e}\``).join(', ')
+                    value: Array.from(client.Commands.keys()).map(e => `- \`/${e}\``).join('\n')
                 }
             ])
         await message.reply({ embeds: [embed] });

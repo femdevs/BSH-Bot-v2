@@ -2,6 +2,7 @@ const { ChannelType } = require("discord.js");
 
 module.exports = {
     name: 'hello',
+    globalDisable: true,
     triggerCfgs: {
         channel: {
             activated: false,

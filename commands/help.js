@@ -24,6 +24,7 @@ module.exports = {
             option
                 .setName('command')
                 .setDescription('The command to get help with')
+                .setAutocomplete(true)
         ),
     async commandExecute(interaction, client) {
         const command = interaction.options.getString('command');
@@ -143,5 +144,15 @@ module.exports = {
                 .addFields(formattedFields)
         }
         message.reply({ embeds: [embed] });
+    },
+    /**
+     * @param {import('discord.js').AutocompleteInteraction} interaction
+     * @param {import('discord.js').Client} client
+     */
+    async autocomplete(interaction, client) {
+        const choices = Array.from(client.Commands.values())
+            .filter(cmd => !cmd.disabled && cmd.type.slash && cmd.info.name.toLowerCase().includes(interaction.options.getFocused()))
+            .map(cmd => ({ name: cmd.info.name, value: cmd.info.name }))
+        interaction.respond(choices)
     }
 };

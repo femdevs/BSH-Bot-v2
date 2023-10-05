@@ -16,6 +16,7 @@ module.exports = {
         if (message.author.bot || message.partial) return;
 
         Array.from(client.Triggers.entries())
+            .filter(([key, trigger]) => trigger.globalDisable === false)
             .forEach(([key, trigger]) => {
                 if (trigger.triggerCfgs.channel.activated) {
                     if (trigger.triggerCfgs.channel.ids.length > 0 && trigger.triggerCfgs.channel.ids.includes(message.channel.id)) {
