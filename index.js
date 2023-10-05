@@ -207,7 +207,7 @@ fs
     .filter(file => file.endsWith('.js'))
     .forEach(file => {
         const command = require(`${__dirname}/components/contextMenus/${file}`);
-        console.log(chalk`{bold Loaded context menu} {red ${command.name}}`);
+        console.log(chalk`{bold Loaded contextMenu} {red ${command.name}}`);
         client.runtimeStats.components.contextMenus.registered++;
         interactions.push(command.data.toJSON());
         contextMenus.set(command.name, command);
@@ -226,7 +226,7 @@ fs.readdirSync(`${__dirname}/components/selectMenus`)
     .filter(file => file.endsWith('.js'))
     .forEach(file => {
         const command = require(`${__dirname}/components/selectMenus/${file}`);
-        console.log(chalk`{bold Loaded select menu} {red ${command.name}}`);
+        console.log(chalk`{bold Loaded selectMenu} {red ${command.name}}`);
         client.runtimeStats.components.selectMenus.registered++;
         selectMenus.set(command.name, command);
     });

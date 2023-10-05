@@ -1,4 +1,11 @@
-const { Events } = require('discord.js');
+const {
+    Events,
+    ContextMenuCommandInteraction,
+    ButtonInteraction,
+    StringSelectMenuInteraction,
+    ModalSubmitInteraction,
+    ChatInputCommandInteraction
+} = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
@@ -12,7 +19,7 @@ module.exports = {
     async execute(interaction, client) {
         client.runtimeStats.events.executed++;
         if (interaction.isAutocomplete()) return client.Commands.get(interaction.commandName).autocomplete(interaction, client);
-        if (interaction.isCommand()) {
+        if (interaction instanceof ChatInputCommandInteraction) {
             const command = client.Commands.get(interaction.commandName);
             if (!command || !command.type.slash) return;
             client.runtimeStats.commands.slashExecuted++;
@@ -30,19 +37,19 @@ module.exports = {
                                     interaction.reply({ content: client.config.defaults.disabled }) :
                                     command.commandExecute(interaction, client);
         }
-        else if (interaction.isContextMenuCommand()) {
+        else if (interaction instanceof ContextMenuCommandInteraction) {
             client.runtimeStats.components.contextMenus.executed++;
             return client.Components.get('contextMenus').get(interaction.commandName).execute(interaction, client)
         }
-        else if (interaction.isButton()) {
+        else if (interaction instanceof ButtonInteraction) {
             client.runtimeStats.components.buttons.executed++;
             return client.Components.get('buttons').get(interaction.customId).execute(interaction, client)
         }
-        else if (interaction.isAnySelectMenu()) {
+        else if (interaction instanceof StringSelectMenuInteraction) {
             client.runtimeStats.components.selectMenus.executed++;
             return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client)
         }
-        else if (interaction.isModalSubmit()) {
+        else if (interaction instanceof ModalSubmitInteraction) {
             client.runtimeStats.components.modals.executed++;
             return client.Components.get('selectMenus').get(interaction.customId).execute(interaction, client)
         }

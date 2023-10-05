@@ -1,26 +1,26 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 
 module.exports = {
-    name: 'NAME',
+    name: 'modal1',
     info: {
-        name: 'NAME',
-        description: 'DESCRIPTION',
+        name: 'modal1',
+        description: 'Testing Modal 1',
         type: 'Base Modal',
     },
     data: new ModalBuilder()
-        .setCustomId('NAME')
-        .setTitle('TITLE')        
+        .setCustomId('modal1')
+        .setTitle('Testing Modal 1')        
         .addComponents(
             new ActionRowBuilder()
                 .addComponents(
                     new TextInputBuilder()
-                        .setCustomId('INPUT')
+                        .setCustomId('modal1_input')
                         .setPlaceholder('Placeholder')
                         .setStyle(TextInputStyle.Short)
                         .setLabel('Label')
                 )
         ),
     async execute(interaction, client) {
-        // Do stuff here
+        interaction.reply({ content: 'Modal 1 pressed!', ephemeral: true });
     }
 }

@@ -1,14 +1,14 @@
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'NAME',
+    name: 'sm1',
     info: {
-        name: 'NAME',
-        description: 'DESCRIPTION',
+        name: 'sm1',
+        description: 'Select Menu 1',
         type: 'String',
     },
     data: new StringSelectMenuBuilder()
-        .setCustomId('NAME')
+        .setCustomId('sm1')
         .setPlaceholder('Placeholder')
         .addOptions(
             new StringSelectMenuOptionBuilder()
@@ -17,6 +17,6 @@ module.exports = {
                 .setDescription('Description')
         ),
     async execute(interaction, client) {
-        // Do stuff here
+        interaction.reply({ content: 'Select Menu 1 pressed!', ephemeral: true });
     }
 }

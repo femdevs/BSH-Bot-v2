@@ -1,17 +1,17 @@
 const { ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
-    name: 'customID',
+    name: 'customButton1',
     info: {
-        name: 'customID',
+        name: 'customButton1',
         description: 'Button Description',
         type: 'Primary',
     },
     data: new ButtonBuilder()
-        .setCustomId('customID')
-        .setLabel('Button Label')
+        .setCustomId('customButton1')
+        .setLabel('Testing Button 1')
         .setStyle(ButtonStyle.Primary),
     async execute(interaction, client) {
-        // Do stuff here
+        interaction.reply({ content: 'Button 1 pressed!', ephemeral: true });
     }
 };

@@ -32,18 +32,6 @@ module.exports = {
                 .setDescription('Get data about a specific component.')
                 .addStringOption(option =>
                     option
-                        .setName('componenttype')
-                        .setDescription('The type of component to get data for.')
-                        .setRequired(true)
-                        .setChoices(
-                            { name: 'Buttons', value: 'buttons' },
-                            { name: 'Select Menus', value: 'selectMenus' },
-                            { name: 'Context Menus', value: 'contextMenus' },
-                            { name: 'Modals', value: 'modals' }
-                        )
-                )
-                .addStringOption(option =>
-                    option
                         .setName('component')
                         .setDescription('The component to get data for.')
                         .setRequired(true)
@@ -93,15 +81,27 @@ module.exports = {
             if (!client.Components.get(componentType).has(component)) return interaction.reply({ content: 'That component does not exist.', ephemeral: true });
             const data = client.Components.get(componentType).get(component);
             embed
-                .setTitle(`Components Data for ${data.name}`)
+                .setTitle(`Components Data`)
                 .setFields([
                     {
+                        name: 'Component Type',
+                        value: componentType.split('').slice(0, componentType.length - 1).join(''),
+                    },
+                    {
+                        name: 'Internal Name',
+                        value: `\`${data.name}\``,
+                    },
+                    {
                         name: 'Name',
-                        value: data.name,
+                        value: data.info.name,
+                    },
+                    {
+                        name: 'Description',
+                        value: data.info.description,
                     },
                     {
                         name: 'Type',
-                        value: componentType,
+                        value: data.info.type,
                     },
                     {
                         name: 'Disabled',
@@ -152,9 +152,9 @@ module.exports = {
     },
     async autocomplete(interaction, client) {
         const opts = []
-        for (let type in Array.from(client.Components.keys())) {
-            for (let component in Array.from(client.Components.get(type).keys())) {
-                opts.push(`${type.toLowerCase()}.${component.toLowerCase()}`)
+        for (const type of Array.from(client.Components.keys())) {
+            for (const component of Array.from(client.Components.get(type).keys())) {
+                opts.push(`${type}.${component}`)
             }
         }
         await interaction.respond(opts.map(e => ({ name: e, value: e })));
