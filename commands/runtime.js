@@ -107,7 +107,8 @@ module.exports = {
                     name: 'Events',
                     value: [
                         `Registered: ${client.runtimeStats.events.registered}`,
-                        `Executed: ${client.runtimeStats.events.executed}`
+                        `Executed: ${client.runtimeStats.events.executed}`,
+                        `Singular Event Executions:\n    ${Object.entries(client.runtimeStats.events.singularEventExecutions).map(([k,v]) => `__${k}__: ${v}`).join('\n    ')}`
                     ].join('\n')
                 },
                 {

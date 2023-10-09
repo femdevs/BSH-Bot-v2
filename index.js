@@ -76,6 +76,12 @@ const client = new Client({
     }
 });
 
+client.bumpEvent = (evName) => {
+    if (!client.runtimeStats.events.singularEventExecutions[evName]) client.runtimeStats.events.singularEventExecutions[evName] = 0;
+    client.runtimeStats.events.singularEventExecutions[evName]++;
+    client.runtimeStats.events.executed++;
+}
+
 const branding = {
     footer: {
         text: 'Brians Protector V2 | Made by The FemDevs'
@@ -99,6 +105,7 @@ const runtimeStats = {
     events: {
         registered: 0,
         executed: 0,
+        singularEventExecutions: {}
     },
     components: {
         buttons: {
@@ -123,17 +130,11 @@ const runtimeStats = {
 
 client.runtimeStats = runtimeStats;
 
-const startCPU = process.cpuUsage();
-
 client.stats = () => {
     const stats = {
         ping: client.ws.ping,
         uptime: Utils.Formatter.list(Utils.Time.elapsedTime(Math.floor(process.uptime())).split(', ')),
         guilds: client.guilds.cache.size.toString(),
-        cpu: {
-            botOnly: ((Object.values(process.cpuUsage(startCPU)).reduce((acc, cpu) => acc + cpu, 0) / os.cpus().reduce((acc, cpu) => acc + cpu.times.idle, 0)) * os.cpus().length * 100).toFixed(2),
-            global: ((os.cpus().map(cpu => (cpu.times.user + cpu.times.sys) / cpu.times.idle).reduce((a, b) => a + b, 0) / os.cpus().length) * 100).toFixed(2)
-        },
         ram: {
             botOnly: {
                 rawValue: (process.memoryUsage().heapTotal / (1024 ** 2)).toFixed(2),

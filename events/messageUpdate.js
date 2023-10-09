@@ -5,7 +5,7 @@ module.exports = {
     name: Events.MessageUpdate,
     once: false,
     async execute(oldMessage, newMessage, client) {
-        client.runtimeStats.events.executed++;
+        client.bumpEvent(Events.MessageUpdate);
         // Ignore if the message is the same, if the author is a bot, if the message is in a DM, or if the message is partial
         if (newMessage.content === oldMessage.content ||
             newMessage.author.bot ||

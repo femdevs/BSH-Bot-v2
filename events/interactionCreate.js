@@ -17,7 +17,7 @@ module.exports = {
      * @param {import('discord.js').Client} client 
      */
     async execute(interaction, client) {
-        client.runtimeStats.events.executed++;
+        client.bumpEvent(Events.InteractionCreate);
         if (interaction.isAutocomplete()) return client.Commands.get(interaction.commandName).autocomplete(interaction, client);
         if (interaction instanceof ChatInputCommandInteraction) {
             const command = client.Commands.get(interaction.commandName);

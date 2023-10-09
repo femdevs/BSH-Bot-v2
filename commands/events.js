@@ -50,19 +50,18 @@ module.exports = {
                         value: event.disabled ? 'Yes' : 'No',
                     },
                 ])
-        } else {
-            embed
-                .setFields([
-                    {
-                        name: 'Total Event Count',
-                        value: `${client.Events.size}`,
-                    },
-                    {
-                        name: 'Events',
-                        value: Array.from(client.Events.keys()).map(e => `\`${e}\``).join(', ')
-                    }
-                ])
-        }
+        } else embed
+            .setFields([
+                {
+                    name: 'Total Event Count',
+                    value: `${client.Events.size}`,
+                },
+                {
+                    name: 'Events',
+                    value: Array.from(client.Events.keys()).map(e => `\`${e}\``).join(', ')
+                },
+                
+            ])
         await interaction.reply({ embeds: [embed] });
     },
     async messageExecute(message, client) {
@@ -88,19 +87,17 @@ module.exports = {
                         value: event.disabled ? 'Yes' : 'No',
                     },
                 ])
-        } else {
-            embed
-                .setFields([
-                    {
-                        name: 'Total Event Count',
-                        value: `${client.Events.size}`,
-                    },
-                    {
-                        name: 'Events',
-                        value: Array.from(client.Events.keys()).map(e => `\`${e}\``).join(', ')
-                    }
-                ])
-        }
+        } else embed
+            .setFields([
+                {
+                    name: 'Total Event Count',
+                    value: `${client.Events.size}`,
+                },
+                {
+                    name: 'Events',
+                    value: Array.from(client.Events.keys()).map(e => `\`${e}\``).join(', ')
+                },
+            ])
         await message.reply({ embeds: [embed] });
     },
     async autocomplete(interaction, client) {

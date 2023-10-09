@@ -40,13 +40,6 @@ module.exports = {
                     value: status.guilds,
                 },
                 {
-                    name: 'CPU usage',
-                    value: [
-                        `Bot Only: ${status.cpu.botOnly}%`,
-                        `Global: ${status.cpu.global}%`
-                    ].join('\n'),
-                },
-                {
                     name: 'RAM usage',
                     value: [
                         `Bot Only: ${client.Utils.Formatter.formatNumber(status.ram.botOnly.rawValue)} ${status.ram.botOnly.unit} (${status.ram.botOnly.percentage}%)`,
@@ -73,13 +66,6 @@ module.exports = {
                 {
                     name: 'Servers',
                     value: status.guilds,
-                },
-                {
-                    name: 'CPU usage',
-                    value: [
-                        `Bot Only: ${status.cpu.botOnly}%`,
-                        `Global: ${status.cpu.global}%`
-                    ].join('\n'),
                 },
                 {
                     name: 'RAM usage',

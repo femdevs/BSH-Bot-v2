@@ -9,7 +9,7 @@ module.exports = {
      * @param {import('discord.js').Client} client 
      */
     async execute(client) {
-        client.runtimeStats.events.executed++;
+        client.bumpEvent(Events.ClientReady);
         const currentStats = {
             ping: Math.max(client.ws.ping, 0),
             guilds: client.guilds.cache.size,

@@ -12,7 +12,7 @@ module.exports = {
      * @returns 
      */
     async execute(message, client) {
-        client.runtimeStats.events.executed++;
+        client.bumpEvent(Events.MessageCreate);
         if (message.author.bot || message.partial) return;
 
         Array.from(client.Triggers.entries())
