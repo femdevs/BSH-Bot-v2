@@ -28,7 +28,7 @@ module.exports = {
         .setDescription('Shows your current level and experience.'),
     async commandExecute(interaction, client) {
         const target = interaction.options.getUser('member') || interaction.user;
-        const { rows: results } = client.Database.MySQL.query(`SELECT * FROM levels WHERE discordId = '${target.id}'`)
+        const { rows: results } = await client.Database.MySQL.query(`SELECT * FROM levels WHERE discordId = '${target.id}'`)
         if (results.length < 1) return await interaction.reply({ content: `Sorry, I can not find any xp for this user`, ephemeral: true })
 
         await interaction.deferReply()
